@@ -1,9 +1,13 @@
 import React from "react";
 import { View, Text } from "react-native";
 
+import { Container } from './style'
+
 function Home(){
     return(
-        <Text>Tela Home</Text>
+        <Container>
+            <Text>Tela Home</Text>
+        </Container>
     )
 }
 
