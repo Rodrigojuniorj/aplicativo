@@ -1,12 +1,28 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-import { Container } from './style'
+//acessando estilos criados
+import { Container, SearchButton, SearchContainer, Input } from './style'
+//acesando components
+import Header from "../../components/Header";
+import { Feather } from '@expo/vector-icons';
+
 
 function Home(){
     return(
         <Container>
-            <Text>Tela Home</Text>
+            <Header title="React Prime"/>
+
+            <SearchContainer>
+                <Input 
+                    placeholder="Ex: Vingadores"
+                    placeholderTextColor="#ddd"
+                />
+                <SearchButton>
+                    <Feather name='search' size={30} color='#FFF' />
+                </SearchButton>
+            </SearchContainer>
+
         </Container>
     )
 }
