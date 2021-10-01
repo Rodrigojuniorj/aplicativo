@@ -17,13 +17,13 @@ function Routes(){
                 headerShown: false,
                 
                 drawerStyle:{
-                    backgroundColor: '#090A0E',
+                    backgroundColor: '#111212',
                     paddingTop: 20,
                 },
 
                 drawerActiveBackgroundColor: '#E72F49',
                 drawerActiveTintColor: '#FFF',
-                drawerInativeTintColor: '#FFF'
+                drawerInactiveTintColor: '#b0b0b0'
             }}
         >
             <Drawer.Screen
