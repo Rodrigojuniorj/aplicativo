@@ -1,3 +1,5 @@
+//consumindo a api
+
 import axios from "axios";
 
 //URL filmes em cartaz

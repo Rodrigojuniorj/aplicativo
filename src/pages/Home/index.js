@@ -21,16 +21,16 @@ import { getListMovies } from '../../utils/movie';
 import { Feather } from '@expo/vector-icons';
 
 function Home(){
-
+    //criando a variavel para pegar os dados da api, 
     const [nowMovies, setNowMovies] = useState([]);
     const [popularMovies, setPopularMovies] = useState([]);
     const [topMovies, setTopMovies] = useState([]);
-
+    //quando o sistema abrir peço para carregar usando o useeffect
     useEffect(() => {
         let isActive = true;
 
         async function getMovies(){
-
+            //pegando as rotas da api, popular, mais tops e os de agora, é so passar a rota
             const [nowData, popularData, topData] = await Promise.all([
                 api.get('/movie/now_playing',{
                     params:{
@@ -54,10 +54,14 @@ function Home(){
                     }
                 }),
             ])
-
+            //utilizando o mudulo util, scrip para pegar apenas um determinado numero de filmes
             const nowList = getListMovies(10, nowData.data.results);
             const popularList = getListMovies(5, popularData.data.results);
             const topList = getListMovies(5, topData.data.results);
+            //colocando nas variaveis de cima dados
+            setNowMovies(nowList);
+            setPopularMovies(popularList);
+            setTopMovies(topList);
             
         }   
 
@@ -87,21 +91,23 @@ function Home(){
                         source={{ uri: 'https://images.unsplash.com/photo-1618249608049-bce3784b6a4b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1170&q=80' }}
                     />
                 </BannerButton>
-
                 <SliderMovie 
+                /* puxando no data os filmes e no render enviando os filmes */
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    data={[1, 2, 3, 4]}
-                    renderItem={ ({item}) => <SliderItem/> }                
+                    data={nowMovies}
+                    renderItem={ ({item}) => <SliderItem data={item}  /> }  
+                    keyExtractor={ (item) => String(item.id) }              
                 />
 
                 <Title>Populares</Title>
-
+            
                 <SliderMovie 
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    data={[1, 2, 3, 4]}
-                    renderItem={ ({item}) => <SliderItem/> }                
+                    data={popularMovies}
+                    renderItem={ ({item}) => <SliderItem data={item}/> }   
+                    keyExtractor={ (item) => String(item.id) }             
                 />
 
                 <Title>Mais Votados</Title>
@@ -109,8 +115,9 @@ function Home(){
                 <SliderMovie 
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    data={[1, 2, 3, 4]}
-                    renderItem={ ({item}) => <SliderItem/> }                
+                    data={topMovies}
+                    renderItem={ ({item}) => <SliderItem data={item}/> } 
+                    keyExtractor={ (item) => String(item.id) }               
                 />
 
             </ScrollView>
