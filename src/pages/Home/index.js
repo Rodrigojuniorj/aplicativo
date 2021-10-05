@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ScrollView } from "react-native";
 
 //acessando estilos criados
@@ -14,10 +14,56 @@ import { Container,
 //acesando components
 import Header from "../../components/Header";
 import SliderItem from "../../components/SliderItem";
+import api, { key } from "../../services/api";
+import { getListMovies } from '../../utils/movie';
+
 
 import { Feather } from '@expo/vector-icons';
 
 function Home(){
+
+    const [nowMovies, setNowMovies] = useState([]);
+    const [popularMovies, setPopularMovies] = useState([]);
+    const [topMovies, setTopMovies] = useState([]);
+
+    useEffect(() => {
+        let isActive = true;
+
+        async function getMovies(){
+
+            const [nowData, popularData, topData] = await Promise.all([
+                api.get('/movie/now_playing',{
+                    params:{
+                        api_key: key,
+                        language: 'pt-BR',
+                        page: 1,
+                    }
+                }),
+                api.get('/movie/popular',{
+                    params:{
+                        api_key: key,
+                        language: 'pt-BR',
+                        page: 1,
+                    }
+                }),
+                api.get('/movie/top_rated',{
+                    params:{
+                        api_key: key,
+                        language: 'pt-BR',
+                        page: 1,
+                    }
+                }),
+            ])
+
+            const nowList = getListMovies(10, nowData.data.results);
+            const popularList = getListMovies(5, popularData.data.results);
+            const topList = getListMovies(5, topData.data.results);
+            
+        }   
+
+        getMovies();
+    }, [])
+
     return(
         <Container>
             <Header title="React Prime"/>
