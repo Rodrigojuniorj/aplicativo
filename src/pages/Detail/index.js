@@ -4,12 +4,19 @@ import { Container,
          HeaderButton,
          Banner,
          ButtonLink,
-         Title                     
+         Title,
+         ContentArea,
+         Rate,
+         ListGenres                 
 } from "./styles";
 
 import { Feather, Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import api, { key } from '../../services/api';
+import Genres from '../../components/Genres';
+
+
+import Stars from 'react-native-stars';
 
 function Detail(){
     const navigation = useNavigation();
@@ -78,6 +85,28 @@ function Detail(){
             </ButtonLink>
             
             <Title numberOfLines={2}>{movie.title}</Title>
+
+            <ContentArea>
+                <Stars 
+                    default={movie.vote_average}
+                    count={10}
+                    half={true}
+                    starSize={20}
+                    fullStar={ <Ionicons name="md-star" size={24} color={"#E7A74e"} />}
+                    emptyStar={<Ionicons name="md-star-outline" size={24} color={"#E7A74e"} />}
+                    halfStar={<Ionicons name="md-star-half" size={24} color={"#E7A74e"} />}
+                    disble={true}
+                />
+                <Rate>{movie.vote_average}/10</Rate>
+            </ContentArea>
+            
+            <ListGenres 
+                data={movie?.genres}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => String(item.id)}
+                renderItem={ ({ item }) => <Genres data={item} /> }
+            />
 
 
         </Container>
