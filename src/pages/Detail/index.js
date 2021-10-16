@@ -19,6 +19,8 @@ import api, { key } from '../../services/api';
 import Genres from '../../components/Genres';
 import ModalLink from "../../components/ModalLink";
 
+import { saveMovie, hasMovie, deleteMovie } from '../../utils/storage';
+
 import Stars from 'react-native-stars';
 
 function Detail(){
@@ -27,6 +29,7 @@ function Detail(){
 
     const [movie, setMovie] = useState({});
     const [openLink, setOpenLink] = useState(false);
+    const [favoritedMovie, setFavoritedMovie] = useState(false);
 
     //array vazio busca o que tiver dentro
     useEffect( () => {
@@ -45,6 +48,10 @@ function Detail(){
 
             if(isActive){
                 setMovie(response.data);
+                
+                const isFavorite = await hasMovie(response.data);
+                setFavoritedMovie(isFavorite);
+
                 //console.log(response.data);
             }
 
@@ -60,6 +67,20 @@ function Detail(){
         }
     }, [])
 
+
+    async function handleFavoriteMovie(movie){
+
+        if(favoritedMovie){
+            await deleteMovie(movie.id);
+            setFavoritedMovie(false);
+            alert('Filme removido da sua lista');
+        }else{
+            await saveMovie('@primereact', movie);
+            setFavoritedMovie(true);
+            alert('Filme salvo na sua lista');
+        }
+    }
+
     return(
         <Container>
             <Header>
@@ -70,12 +91,20 @@ function Detail(){
                         color="#FFF"
                     />
                 </HeaderButton>
-                <HeaderButton>
+                <HeaderButton onPress={ () => handleFavoriteMovie(movie)}>
+                   { favoritedMovie ? (
+                        <Ionicons 
+                            name='bookmark'
+                            size={28}
+                            color="#FFF"
+                        />
+                   ) : (
                     <Ionicons 
-                        name='bookmark'
+                        name='bookmark-outline'
                         size={28}
                         color="#FFF"
                     />
+                   )}
                 </HeaderButton>
             </Header>
 
